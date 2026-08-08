@@ -110,7 +110,10 @@ if (!existsSync(skillPath)) {
     if (!body.includes("beecargo_upload")) {
       errors.push("SKILL.md: must document beecargo_upload");
     }
-    if (!/\bretired\b/i.test(body) && /beecargo_remote_upload|beecargo_upload_file/.test(body)) {
+    if (
+      !/\bretired\b/i.test(body) &&
+      /beecargo_remote_upload|beecargo_upload_file/.test(body)
+    ) {
       errors.push(
         "SKILL.md: must not recommend retired split upload tools without marking them retired",
       );
