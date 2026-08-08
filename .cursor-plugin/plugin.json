@@ -1,0 +1,16 @@
+{
+  "name": "beecargo",
+  "version": "1.0.0",
+  "description": "Publish files and get durable Beecargo share links via MCP — no dashboard login required.",
+  "author": {
+    "name": "Beecargo",
+    "email": "hello@beecargo.net"
+  },
+  "homepage": "https://beecargo.net",
+  "repository": "https://github.com/Beecargo/agent-plugin",
+  "license": "MIT",
+  "keywords": ["mcp", "file-hosting", "share-link", "upload", "agents"],
+  "logo": "assets/logo.svg",
+  "skills": "skills/",
+  "mcpServers": "mcp.json"
+}

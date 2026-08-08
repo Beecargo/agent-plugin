@@ -1,0 +1,14 @@
+{
+  "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
+  "name": "beecargo",
+  "version": "1.0.0",
+  "description": "Publish files and get durable Beecargo share links via MCP — no dashboard login required.",
+  "author": {
+    "name": "Beecargo",
+    "url": "https://beecargo.net"
+  },
+  "homepage": "https://beecargo.net",
+  "repository": "https://github.com/Beecargo/agent-plugin",
+  "license": "MIT",
+  "keywords": ["mcp", "file-hosting", "share-link", "upload", "agents"]
+}
