@@ -1,0 +1,9 @@
+{
+  "mcpServers": {
+    "beecargo": {
+      "type": "http",
+      "url": "https://mcp.beecargo.net/mcp",
+      "oauth_resource": "https://mcp.beecargo.net/mcp"
+    }
+  }
+}

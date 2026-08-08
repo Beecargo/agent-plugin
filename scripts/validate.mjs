@@ -80,6 +80,60 @@ if (cursorManifest) {
   }
 }
 
+const codexManifest = readJson(".codex-plugin/plugin.json");
+if (codexManifest) {
+  if (!codexManifest.name) {
+    errors.push(".codex-plugin/plugin.json: name is required");
+  }
+  if (plugin && codexManifest.name !== plugin.name) {
+    errors.push(".codex-plugin/plugin.json: name must match plugin.json");
+  }
+  if (codexManifest.mcpServers !== "./.mcp.json") {
+    errors.push('.codex-plugin/plugin.json: mcpServers must be "./.mcp.json"');
+  }
+  if (codexManifest.skills !== "./skills/") {
+    errors.push('.codex-plugin/plugin.json: skills must be "./skills/"');
+  }
+} else {
+  errors.push("Missing file: .codex-plugin/plugin.json");
+}
+
+const codexMcp = readJson(".mcp.json");
+if (codexMcp) {
+  const servers = codexMcp.mcpServers ?? codexMcp.mcp_servers ?? codexMcp;
+  const beecargo = servers?.beecargo;
+  if (!beecargo?.url) {
+    errors.push(".mcp.json: beecargo.url is required");
+  } else if (beecargo.url !== "https://mcp.beecargo.net/mcp") {
+    errors.push(".mcp.json: beecargo.url must be https://mcp.beecargo.net/mcp");
+  }
+} else {
+  errors.push("Missing file: .mcp.json");
+}
+
+const marketplace = readJson(".agents/plugins/marketplace.json");
+if (marketplace) {
+  if (marketplace.name !== "beecargo") {
+    errors.push('.agents/plugins/marketplace.json: name must be "beecargo"');
+  }
+  const entry = marketplace.plugins?.find((p) => p.name === "beecargo");
+  if (!entry) {
+    errors.push(".agents/plugins/marketplace.json: plugins[] must include beecargo");
+  } else if (entry.source?.path !== "./plugins/beecargo") {
+    errors.push(
+      '.agents/plugins/marketplace.json: beecargo source.path must be "./plugins/beecargo"',
+    );
+  }
+  const pluginRoot = join(root, "plugins/beecargo");
+  if (!existsSync(pluginRoot)) {
+    errors.push("plugins/beecargo is missing (directory or symlink to plugin root)");
+  } else if (!existsSync(join(pluginRoot, ".codex-plugin/plugin.json"))) {
+    errors.push("plugins/beecargo/.codex-plugin/plugin.json is missing");
+  }
+} else {
+  errors.push("Missing file: .agents/plugins/marketplace.json");
+}
+
 const skillDir = "skills/publish-share-link";
 const skillPath = join(root, skillDir, "SKILL.md");
 if (!existsSync(skillPath)) {

@@ -10,13 +10,13 @@ Beecargo is for **publish + link**, not cloud drive sync. Prefer this skill when
 
 ## Prerequisites
 
-1. Beecargo MCP is connected (this plugin's `mcp.json` points at `https://mcp.beecargo.net/mcp` with no headers — full tool set; session adopts a key after register).
+1. Beecargo MCP is connected (`https://mcp.beecargo.net/mcp`). Prefer **Connect with Beecargo** (OAuth) in the client; a `bc_*` header also works. Guest bootstrap without account OAuth: `https://mcp.beecargo.net/mcp/guest`.
 2. If tools are missing, call `beecargo_search_tools` with keywords like `upload`, `share`, `checkout`.
 3. Do **not** call retired tools (`beecargo_remote_upload`, `beecargo_upload_file`, or multipart MCP helpers). Use **`beecargo_upload`** only.
 
 ## Happy path (recommended)
 
-1. **`beecargo_register_agent`** — mints a session `bc_*` key (bootstrap: **10GB** concurrent storage / **100** rpm). The HTTP session adopts the key automatically for later `beecargo_list_files` / `beecargo_claim_file` / `beecargo_update_share_settings`. Response includes `verified: { tier, basis }`; full ladder at `GET /agent/capabilities` → `trust_ladder`.
+1. **`beecargo_register_agent`** (still required for owned bootstrap storage even after OAuth) — mints a session `bc_*` key (bootstrap: **10GB** concurrent storage / **100** rpm). The HTTP session adopts the key automatically for later `beecargo_list_files` / `beecargo_claim_file` / `beecargo_update_share_settings`. Response includes `verified: { tier, basis }`; full ladder at `GET /agent/capabilities` → `trust_ladder`.
 2. **Upload** — single tool **`beecargo_upload`**:
    - **Public HTTPS source:** `url` (preferred for agents).
    - **Small payload (<4MB on hosted MCP):** `contentBase64` (+ `fileName`).

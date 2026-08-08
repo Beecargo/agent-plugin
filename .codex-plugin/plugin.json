@@ -1,0 +1,36 @@
+{
+  "name": "beecargo",
+  "version": "1.1.0",
+  "description": "Publish files and get durable Beecargo share links via MCP. Connect with Beecargo (OAuth) or a bc_* key — no dashboard login required for bootstrap.",
+  "author": {
+    "name": "Beecargo",
+    "email": "hello@beecargo.net",
+    "url": "https://beecargo.net"
+  },
+  "homepage": "https://beecargo.net",
+  "repository": "https://github.com/Beecargo/agent-plugin",
+  "license": "MIT",
+  "keywords": ["mcp", "file-hosting", "share-link", "upload", "agents", "oauth"],
+  "skills": "./skills/",
+  "mcpServers": "./.mcp.json",
+  "interface": {
+    "displayName": "Beecargo",
+    "shortDescription": "Publish files → durable share links",
+    "longDescription": "Connect Codex to hosted Beecargo MCP. Agents register a bootstrap key, upload via a public URL or small payload, and return https://beecargo.net/d/{shortId} for humans. OAuth Connect with Beecargo is the recommended auth path; API keys work too.",
+    "developerName": "Beecargo",
+    "category": "Developer Tools",
+    "capabilities": ["Read", "Write"],
+    "websiteURL": "https://beecargo.net",
+    "privacyPolicyURL": "https://beecargo.net/docs/privacy",
+    "termsOfServiceURL": "https://beecargo.net/docs/terms",
+    "defaultPrompt": [
+      "Publish this artifact to Beecargo and give me a share link",
+      "Upload a public HTTPS file URL to Beecargo and return /d/{shortId}",
+      "Register a Beecargo agent key then publish a share link"
+    ],
+    "brandColor": "#C4A35A",
+    "composerIcon": "./assets/logo.svg",
+    "logo": "./assets/logo.svg",
+    "screenshots": []
+  }
+}

@@ -1,0 +1,20 @@
+{
+  "name": "beecargo",
+  "interface": {
+    "displayName": "Beecargo"
+  },
+  "plugins": [
+    {
+      "name": "beecargo",
+      "source": {
+        "source": "local",
+        "path": "./plugins/beecargo"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Developer Tools"
+    }
+  ]
+}

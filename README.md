@@ -2,8 +2,8 @@
 
 Portable [Agent Plugins 1.0](https://agent-plugins.org) package: **Agent Skill** + **hosted MCP** for publishing durable share links.
 
-- **MCP endpoint:** `https://mcp.beecargo.net/mcp` (full tool set; zero-header when hosted bootstrap is open)
-- **Guest-only endpoint:** `https://mcp.beecargo.net/mcp/guest` (register / upload / checkout / search — use when `/mcp` requires auth)
+- **MCP endpoint:** `https://mcp.beecargo.net/mcp` (full tools; OAuth **Connect with Beecargo**, or `bc_*` / Bearer)
+- **Guest-only endpoint:** `https://mcp.beecargo.net/mcp/guest` (register / upload / checkout / search without account OAuth)
 - **Docs:** [beecargo.net/docs/mcp/overview](https://beecargo.net/docs/mcp/overview)
 - **Privacy:** [beecargo.net/docs/privacy](https://beecargo.net/docs/privacy)
 
@@ -29,17 +29,50 @@ Manual MCP-only config (no plugin folder):
 }
 ```
 
-### Codex / ChatGPT / GitHub Copilot / VS Code / Kiro
+### Codex (Agent Plugin marketplace)
+
+This repo is a Codex marketplace + plugin (`/.agents/plugins/marketplace.json` + `/.codex-plugin/plugin.json` + `/.mcp.json`).
+
+```bash
+# local (monorepo submodule) or public GitHub
+codex plugin marketplace add /path/to/apps/agent-plugin
+# or: codex plugin marketplace add Beecargo/agent-plugin
+
+codex plugin add beecargo@beecargo
+```
+
+Complete **Connect with Beecargo** when Codex prompts OAuth (`policy.authentication: ON_INSTALL`).
+
+MCP-only (no plugin skills):
+
+```bash
+codex mcp add beecargo --url https://mcp.beecargo.net/mcp
+# if OAuth does not start automatically:
+codex mcp login beecargo
+```
+
+### Agent Plugins 1.0 (ChatGPT / Copilot / VS Code / Kiro)
 
 Use this folder as an Agent Plugin (root `plugin.json` + `mcp.json` + `skills/`). Clients that support Agent Plugins 1.0 discover components from fixed paths.
 
+### OpenCode
+
+No official marketplace yet. Install the hosted MCP and complete **Connect with Beecargo**:
+
+```bash
+opencode mcp add beecargo --url https://mcp.beecargo.net/mcp
+opencode mcp auth beecargo
+```
+
+Then `opencode mcp list` should show Beecargo connected.
+
 ### Claude
 
-Use **Custom connector** with URL `https://mcp.beecargo.net/mcp` today. Official [Connectors Directory](https://claude.com/docs/connectors/directory) listing requires OAuth and a separate submission — see [PUBLISH.md](./PUBLISH.md).
+Use **Custom connector** with URL `https://mcp.beecargo.net/mcp` today. Official [Connectors Directory](https://claude.com/docs/connectors/directory) listing requires a separate submission — see [PUBLISH.md](./PUBLISH.md).
 
 ## Quick start for agents
 
-1. Connect MCP (no headers by default on `/mcp`).
+1. Connect MCP at `/mcp` (OAuth in the browser, or a `bc_*` key). Guest bootstrap: `/mcp/guest`.
 2. `beecargo_register_agent` → bootstrap `bc_*` (**10GB** / **100rpm**; session adopts the key).
 3. `beecargo_upload` with public HTTPS `url` (preferred), small `contentBase64`, or stdio `path`. Large/slow URLs: `background: true` then `beecargo_upload_status`.
 4. Return `shareUrl` / `human_link` (`https://beecargo.net/d/{shortId}`), plus `sha256` and `agent_link` when present.
@@ -49,12 +82,16 @@ Local files outside MCP: `npx --yes github:Beecargo/cli upload <path> --json`.
 
 ## Package layout
 
-| Path                         | Purpose                       |
-| ---------------------------- | ----------------------------- |
-| `plugin.json`                | Agent Plugins manifest        |
-| `mcp.json`                   | Streamable HTTP MCP server    |
-| `.cursor-plugin/plugin.json` | Cursor Marketplace manifest   |
-| `skills/publish-share-link/` | Agent Skill for handoff flows |
+| Path                              | Purpose                                      |
+| --------------------------------- | -------------------------------------------- |
+| `plugin.json`                     | Agent Plugins 1.0 manifest                   |
+| `mcp.json`                        | Agent Plugins streamable-http MCP            |
+| `.codex-plugin/plugin.json`       | Codex plugin manifest                        |
+| `.mcp.json`                       | Codex bundled MCP (URL → hosted `/mcp`)      |
+| `.agents/plugins/marketplace.json`| Codex marketplace catalog (`beecargo@beecargo`) |
+| `plugins/beecargo` → `..`         | Codex plugin path (symlink to this repo root)|
+| `.cursor-plugin/plugin.json`      | Cursor Marketplace manifest                  |
+| `skills/publish-share-link/`      | Agent Skill (includes register → upload)     |
 
 ## Validate
 
