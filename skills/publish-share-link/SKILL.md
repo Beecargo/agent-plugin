@@ -10,18 +10,20 @@ Beecargo is for **publish + link**, not cloud drive sync. Prefer this skill when
 
 ## Prerequisites
 
-1. Beecargo MCP is connected (this plugin's `mcp.json` points at `https://mcp.beecargo.net/mcp` with no headers).
-2. If tools are missing, call `beecargo_search_tools` with keywords like `upload`, `remote`, `share`.
+1. Beecargo MCP is connected (this plugin's `mcp.json` points at `https://mcp.beecargo.net/mcp` with no headers — full tool set; session adopts a key after register).
+2. If tools are missing, call `beecargo_search_tools` with keywords like `upload`, `share`, `checkout`.
+3. Do **not** call retired tools (`beecargo_remote_upload`, `beecargo_upload_file`, or multipart MCP helpers). Use **`beecargo_upload`** only.
 
 ## Happy path (recommended)
 
-1. **`beecargo_register_agent`** — mints a session `bc_*` key (bootstrap tier). The HTTP session adopts the key automatically for later `beecargo_list_files` / `beecargo_claim_file`. Response includes `verified: { tier, basis }`; full ladder at `GET /agent/capabilities` → `trust_ladder`.
+1. **`beecargo_register_agent`** — mints a session `bc_*` key (bootstrap: **10GB** concurrent storage / **100** rpm). The HTTP session adopts the key automatically for later `beecargo_list_files` / `beecargo_claim_file` / `beecargo_update_share_settings`. Response includes `verified: { tier, basis }`; full ladder at `GET /agent/capabilities` → `trust_ladder`.
 2. **Upload** — single tool **`beecargo_upload`**:
    - **Public HTTPS source:** `url` (preferred for agents).
-   - **Small payload (<4MB on hosted MCP):** `contentBase64`.
+   - **Small payload (<4MB on hosted MCP):** `contentBase64` (+ `fileName`).
    - **Local path (stdio MCP only):** `path` (auto multipart for large files).
-   - Optional: `ttl`, `grace`, `maxDownloads` / `once`, `protect`, `runId` / `step` / `intent`.
-3. **Return** `shareUrl` / `human_link` (`https://beecargo.net/d/{shortId}`) plus `sha256` and `agent_link` when present.
+   - Large/slow URLs: `background: true`, then **`beecargo_upload_status`** with `jobId` / `jobSecret`.
+   - Optional: `ttl`, `grace`, `maxDownloads` / `once`, `protect`, `handoffMessage`, `runId` / `step` / `intent`, `visibility`, `direct`.
+3. **Return** `shareUrl` / `human_link` (`https://beecargo.net/d/{shortId}`) plus `sha256` and `agent_link` when present. Humans can also enter `{shortId}` at `https://beecargo.net/get`.
 4. **Optional handoff:** `protect: true` on upload (or `beecargo_update_share_settings`) → save `unlockCode` and `handoffUrl` (`/h/…`) privately.
 
 ## Fields to save from responses
@@ -43,11 +45,11 @@ Call `beecargo_get_download_url` for a signed GET. For protected files, pass `un
 
 ## Anonymous (no register)
 
-`beecargo_upload` works without `beecargo_register_agent` under stricter limits. Always save `deletionToken` if the user may want to remove the file later.
+`beecargo_upload` works without `beecargo_register_agent` under stricter limits (1GB/file). Always save `deletionToken` if the user may want to remove the file later.
 
 ## Premium / existing keys
 
-If the user already has `bc_*` from the dashboard, configure the MCP client with `x-beecargo-api-key` or `Authorization: Bearer bc_*` instead of registering. Do not commit keys into the plugin repo.
+If the user already has `bc_*` from the dashboard, configure the MCP client with `x-beecargo-api-key` or `Authorization: Bearer bc_*` instead of registering. Do not commit keys into the plugin repo. Pro agent keys: 500GB included concurrent storage / 1000rpm.
 
 ## When limits hit (Premium conversion)
 
@@ -62,7 +64,7 @@ Do not send humans to `/pricing` for this flow. monthly/annual only if they expl
 
 ## Failure modes (escalate to human)
 
-- **Private or auth-gated source URL** — `url` on `beecargo_upload` only accepts public HTTPS URLs (SSRF-safe). Use stdio `path`, REST multipart, or CLI `beecargo upload`.
+- **Private or auth-gated source URL** — `url` on `beecargo_upload` only accepts public HTTPS URLs (SSRF-safe). Use stdio `path`, REST multipart, or CLI `npx @beecargo/cli upload`.
 - **>4MB via base64 in MCP** — use `url`, stdio `path`, or CLI.
 - **Anonymous/free quota exceeded** — follow **When limits hit** above (`beecargo_create_checkout`).
 - **Anonymous file >1GB** — needs Free or Premium; offer Premium via the conversion steps.
@@ -72,3 +74,4 @@ Do not send humans to `/pricing` for this flow. monthly/annual only if they expl
 
 - MCP overview: https://beecargo.net/docs/mcp/overview
 - Agent corpus: https://beecargo.net/llms.txt
+- CLI: `npx @beecargo/cli upload <path> --json` / `remote <url> --json`

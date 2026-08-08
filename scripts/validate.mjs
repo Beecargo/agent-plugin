@@ -107,6 +107,14 @@ if (!existsSync(skillPath)) {
     if (skillName && skillName !== "publish-share-link") {
       errors.push("SKILL.md: name must match directory publish-share-link");
     }
+    if (!body.includes("beecargo_upload")) {
+      errors.push("SKILL.md: must document beecargo_upload");
+    }
+    if (!/\bretired\b/i.test(body) && /beecargo_remote_upload|beecargo_upload_file/.test(body)) {
+      errors.push(
+        "SKILL.md: must not recommend retired split upload tools without marking them retired",
+      );
+    }
   }
 }
 

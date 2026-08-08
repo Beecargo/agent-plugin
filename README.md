@@ -2,7 +2,8 @@
 
 Portable [Agent Plugins 1.0](https://agent-plugins.org) package: **Agent Skill** + **hosted MCP** for publishing durable share links.
 
-- **MCP endpoint:** `https://mcp.beecargo.net/mcp`
+- **MCP endpoint:** `https://mcp.beecargo.net/mcp` (full tool set; zero-header when hosted bootstrap is open)
+- **Guest-only endpoint:** `https://mcp.beecargo.net/mcp/guest` (register / upload / checkout / search — use when `/mcp` requires auth)
 - **Docs:** [beecargo.net/docs/mcp/overview](https://beecargo.net/docs/mcp/overview)
 - **Privacy:** [beecargo.net/docs/privacy](https://beecargo.net/docs/privacy)
 
@@ -38,9 +39,13 @@ Use **Custom connector** with URL `https://mcp.beecargo.net/mcp` today. Official
 
 ## Quick start for agents
 
-1. Connect MCP (no headers by default).
-2. `beecargo_register_agent` → `beecargo_upload` with `url` (public HTTPS), `contentBase64` (small), or stdio `path` for local files.
-3. Return `shareUrl`, `sha256`, and `agent_link` from the tool response.
+1. Connect MCP (no headers by default on `/mcp`).
+2. `beecargo_register_agent` → bootstrap `bc_*` (**10GB** / **100rpm**; session adopts the key).
+3. `beecargo_upload` with public HTTPS `url` (preferred), small `contentBase64`, or stdio `path`. Large/slow URLs: `background: true` then `beecargo_upload_status`.
+4. Return `shareUrl` / `human_link` (`https://beecargo.net/d/{shortId}`), plus `sha256` and `agent_link` when present.
+5. On quota limits: `beecargo_create_checkout` (default `plan=recommended`) and send the human the Stripe URL.
+
+Local files outside MCP: `npx @beecargo/cli upload <path> --json`.
 
 ## Package layout
 
@@ -61,7 +66,7 @@ pnpm plugin:validate
 
 ## Monorepo note
 
-This directory is maintained inside the Beecargo monorepo at `apps/agent-plugin`. For marketplace submission, copy or publish it as a standalone public repository and update `repository` URLs in the manifests — see [PUBLISH.md](./PUBLISH.md).
+This directory is the public submodule [`Beecargo/agent-plugin`](https://github.com/Beecargo/agent-plugin) at `apps/agent-plugin`. Marketplace submission uses this repo as-is — see [PUBLISH.md](./PUBLISH.md).
 
 ## License
 
