@@ -45,7 +45,7 @@ Use **Custom connector** with URL `https://mcp.beecargo.net/mcp` today. Official
 4. Return `shareUrl` / `human_link` (`https://beecargo.net/d/{shortId}`), plus `sha256` and `agent_link` when present.
 5. On quota limits: `beecargo_create_checkout` (default `plan=recommended`) and send the human the Stripe URL.
 
-Local files outside MCP: `npx @beecargo/cli upload <path> --json`.
+Local files outside MCP: `npx --yes github:Beecargo/cli upload <path> --json`.
 
 ## Package layout
 

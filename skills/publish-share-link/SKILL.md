@@ -49,7 +49,7 @@ Call `beecargo_get_download_url` for a signed GET. For protected files, pass `un
 
 ## Premium / existing keys
 
-If the user already has `bc_*` from the dashboard, configure the MCP client with `x-beecargo-api-key` or `Authorization: Bearer bc_*` instead of registering. Do not commit keys into the plugin repo. Pro agent keys: 500GB included concurrent storage / 1000rpm.
+If the user already has `bc_*` from the dashboard, configure the MCP client with `x-beecargo-api-key` or `Authorization: Bearer bc_*` instead of registering. Do not commit keys into the plugin repo. Pro agent keys: 100GB included concurrent storage / 1000rpm.
 
 ## When limits hit (Premium conversion)
 
@@ -64,7 +64,7 @@ Do not send humans to `/pricing` for this flow. monthly/annual only if they expl
 
 ## Failure modes (escalate to human)
 
-- **Private or auth-gated source URL** — `url` on `beecargo_upload` only accepts public HTTPS URLs (SSRF-safe). Use stdio `path`, REST multipart, or CLI `npx @beecargo/cli upload`.
+- **Private or auth-gated source URL** — `url` on `beecargo_upload` only accepts public HTTPS URLs (SSRF-safe). Use stdio `path`, REST multipart, or CLI `npx --yes github:Beecargo/cli upload`.
 - **>4MB via base64 in MCP** — use `url`, stdio `path`, or CLI.
 - **Anonymous/free quota exceeded** — follow **When limits hit** above (`beecargo_create_checkout`).
 - **Anonymous file >1GB** — needs Free or Premium; offer Premium via the conversion steps.
@@ -74,4 +74,4 @@ Do not send humans to `/pricing` for this flow. monthly/annual only if they expl
 
 - MCP overview: https://beecargo.net/docs/mcp/overview
 - Agent corpus: https://beecargo.net/llms.txt
-- CLI: `npx @beecargo/cli upload <path> --json` / `remote <url> --json`
+- CLI: `npx --yes github:Beecargo/cli upload <path> --json` / `remote <url> --json`
