@@ -23,7 +23,7 @@ Beecargo is for **publish + link**, not cloud drive sync. Prefer this skill when
    - **Local path (stdio MCP only):** `path` (auto multipart for large files).
    - Large/slow URLs: `background: true`, then **`beecargo_upload_status`** with `jobId` / `jobSecret`.
    - Optional: `ttl`, `grace`, `maxDownloads` / `once`, `protect`, `handoffMessage`, `runId` / `step` / `intent`, `visibility`, `direct`.
-3. **Return** `shareUrl` / `human_link` (`https://beecargo.net/d/{shortId}`) plus `sha256` and `agent_link` when present. Humans can also enter `{shortId}` at `https://beecargo.net/get`.
+3. **Return** `shareUrl` / `human_link` (`https://beecargo.net/d/{shortId}`) plus `sha256` and `agent_link` when present. Always hand off the full share URL — not a bare `{shortId}`.
 4. **Optional handoff:** `protect: true` on upload (or `beecargo_update_share_settings`) → save `unlockCode` and `handoffUrl` (`/h/…`) privately.
 
 ## Fields to save from responses
