@@ -65,6 +65,7 @@ OAuth consent is live (`BEECARGO_MERCHANT_OAUTH_ENABLED=true` on API + MCP, shar
 Directory listing still needs Anthropic review materials:
 
 - Secure OAuth, tool annotations, privacy policy, public docs, and **test credentials** for review.
+
 1. Read [submission guidelines](https://claude.com/docs/connectors/building/submission) and [review criteria](https://claude.com/docs/connectors/building/review-criteria).
 2. Submit via [Claude.ai admin directory portal](https://claude.ai/admin-settings/directory/submissions/new) (Team/Enterprise org required).
 3. Note: MCP Registry / `modelcontextprotocol/servers` does **not** auto-list in Claude — directory submit is separate.

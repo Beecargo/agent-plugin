@@ -82,16 +82,16 @@ Local files outside MCP: `npx --yes github:Beecargo/cli upload <path> --json`.
 
 ## Package layout
 
-| Path                              | Purpose                                      |
-| --------------------------------- | -------------------------------------------- |
-| `plugin.json`                     | Agent Plugins 1.0 manifest                   |
-| `mcp.json`                        | Agent Plugins streamable-http MCP            |
-| `.codex-plugin/plugin.json`       | Codex plugin manifest                        |
-| `.mcp.json`                       | Codex bundled MCP (URL → hosted `/mcp`)      |
-| `.agents/plugins/marketplace.json`| Codex marketplace catalog (`beecargo@beecargo`) |
-| `plugins/beecargo` → `..`         | Codex plugin path (symlink to this repo root)|
-| `.cursor-plugin/plugin.json`      | Cursor Marketplace manifest                  |
-| `skills/publish-share-link/`      | Agent Skill (includes register → upload)     |
+| Path                               | Purpose                                         |
+| ---------------------------------- | ----------------------------------------------- |
+| `plugin.json`                      | Agent Plugins 1.0 manifest                      |
+| `mcp.json`                         | Agent Plugins streamable-http MCP               |
+| `.codex-plugin/plugin.json`        | Codex plugin manifest                           |
+| `.mcp.json`                        | Codex bundled MCP (URL → hosted `/mcp`)         |
+| `.agents/plugins/marketplace.json` | Codex marketplace catalog (`beecargo@beecargo`) |
+| `plugins/beecargo` → `..`          | Codex plugin path (symlink to this repo root)   |
+| `.cursor-plugin/plugin.json`       | Cursor Marketplace manifest                     |
+| `skills/publish-share-link/`       | Agent Skill (includes register → upload)        |
 
 ## Validate
 
