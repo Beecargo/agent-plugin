@@ -37,7 +37,7 @@ Beecargo is for **publish + link**, not cloud drive sync. Prefer this skill when
 | `claimToken`                | Anonymous upload; claim into an account later  |
 | `deletionToken`             | Anonymous upload; delete without an API key    |
 | `unlockCode` / `handoffUrl` | Protected shares                               |
-| `runId`                     | Pipeline manifests (`beecargo_run_artifacts`)  |
+| `runId`                     | Pipeline manifests (`beecargo_list_files` with `runId`) |
 
 ## When another tool needs bytes
 
