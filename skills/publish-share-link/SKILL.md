@@ -10,21 +10,25 @@ Beecargo is for **publish + link**, not cloud drive sync. Prefer this skill when
 
 ## Prerequisites
 
-1. Beecargo MCP is connected (`https://mcp.beecargo.net/mcp`). Prefer **Connect with Beecargo** (OAuth) in the client; a `bc_*` header also works. Guest bootstrap without account OAuth: `https://mcp.beecargo.net/mcp/guest`.
+1. Beecargo MCP is connected. Fastest bootstrap (under ~30s): `https://mcp.beecargo.net/mcp/guest` with **no headers**. Full tools / OAuth: `https://mcp.beecargo.net/mcp`. A `bc_*` header also works.
 2. If tools are missing, call `beecargo_search_tools` with keywords like `upload`, `share`, `checkout`.
 3. Do **not** call retired tools (`beecargo_remote_upload`, `beecargo_upload_file`, or multipart MCP helpers). Use **`beecargo_upload`** only.
 
-## Happy path (recommended)
+## Happy path (recommended — one-shot)
 
-1. **`beecargo_register_agent`** (still required for owned bootstrap storage even after OAuth) — mints a session `bc_*` key (bootstrap: **10GB** concurrent storage / **100** rpm). The HTTP session adopts the key automatically for later `beecargo_list_files` / `beecargo_claim_file` / `beecargo_update_share_settings`. Response includes `verified: { tier, basis }`; full ladder at `GET /agent/capabilities` → `trust_ladder`.
-2. **Upload** — single tool **`beecargo_upload`**:
+1. **Upload** — single tool **`beecargo_upload`** (anonymous/guest is fine):
    - **Public HTTPS source:** `url` (preferred for agents).
    - **Small payload (<4MB on hosted MCP):** `contentBase64` (+ `fileName`).
    - **Local path (stdio MCP only):** `path` (auto multipart for large files).
    - Large/slow URLs: `background: true`, then **`beecargo_upload_status`** with `jobId` / `jobSecret`.
    - Optional: `ttl`, `grace`, `maxDownloads` / `once`, `protect`, `handoffMessage`, `runId` / `step` / `intent`, `visibility`, `direct`.
-3. **Return** `shareUrl` / `human_link` (`https://beecargo.net/d/{shortId}`) plus `sha256` and `agent_link` when present. Always hand off the full share URL — not a bare `{shortId}`.
+2. **Return immediately** `shareUrl` / `human_link` (`https://beecargo.net/d/{shortId}`) plus `sha256` and `agent_link` when present. Always hand off the full share URL — not a bare `{shortId}`.
+3. **Do not wait** for `scanStatus=clean` before giving humans the link. Machine downloads may still wait on the safety check.
 4. **Optional handoff:** `protect: true` on upload (or `beecargo_update_share_settings`) → save `unlockCode` and `handoffUrl` (`/h/…`) privately.
+
+## When to register
+
+Call **`beecargo_register_agent`** only when you need owned storage, `beecargo_list_files`, `beecargo_claim_file`, or multi-file ownership. It mints a session `bc_*` key (bootstrap: **10GB** concurrent storage / **100** rpm). The HTTP session adopts the key automatically. Response includes `verified: { tier, basis }`; full ladder at `GET /agent/capabilities` → `trust_ladder`.
 
 ## Fields to save from responses
 
@@ -41,11 +45,7 @@ Beecargo is for **publish + link**, not cloud drive sync. Prefer this skill when
 
 ## When another tool needs bytes
 
-Call `beecargo_get_download_url` for a signed GET. For protected files, pass `unlockCode`, `unlockToken`, or `handoffToken` as required.
-
-## Anonymous (no register)
-
-`beecargo_upload` works without `beecargo_register_agent` under stricter limits (1GB/file). Always save `deletionToken` if the user may want to remove the file later.
+Call `beecargo_get_download_url` for a signed GET. For protected files, pass `unlockCode`, `unlockToken`, or `handoffToken` as required. Wait for `scanStatus=clean` (or `file.ready`) before machine download.
 
 ## Premium / existing keys
 
