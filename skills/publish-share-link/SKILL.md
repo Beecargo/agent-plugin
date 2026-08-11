@@ -28,15 +28,15 @@ Beecargo is for **publish + link**, not cloud drive sync. Prefer this skill when
 
 ## Fields to save from responses
 
-| Field                       | When                                           |
-| --------------------------- | ---------------------------------------------- |
-| `shareUrl` / `human_link`   | Always                                         |
-| `agent_link` / `agentLink`  | Machine download URL when returned             |
-| `sha256`                    | Integrity + idempotent retries                 |
-| `fileId`                    | Follow-up API/MCP calls (not the storage UUID) |
-| `claimToken`                | Anonymous upload; claim into an account later  |
-| `deletionToken`             | Anonymous upload; delete without an API key    |
-| `unlockCode` / `handoffUrl` | Protected shares                               |
+| Field                       | When                                                    |
+| --------------------------- | ------------------------------------------------------- |
+| `shareUrl` / `human_link`   | Always                                                  |
+| `agent_link` / `agentLink`  | Machine download URL when returned                      |
+| `sha256`                    | Integrity + idempotent retries                          |
+| `fileId`                    | Follow-up API/MCP calls (not the storage UUID)          |
+| `claimToken`                | Anonymous upload; claim into an account later           |
+| `deletionToken`             | Anonymous upload; delete without an API key             |
+| `unlockCode` / `handoffUrl` | Protected shares                                        |
 | `runId`                     | Pipeline manifests (`beecargo_list_files` with `runId`) |
 
 ## When another tool needs bytes
